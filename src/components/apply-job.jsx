@@ -20,24 +20,29 @@ import useFetch from "@/hooks/use-fetch";
 import { applyToJob } from "@/api/apiApplication";
 import { BarLoader } from "react-spinners";
 
+// Using react hook - form and zod to managing form and validations.
+
+// zod is a validation liberary it checks the value that we have provided in the form is correct or not.
 const schema = z.object({
-  experience: z
-    .number()
-    .min(0, { message: "Experience must be at least 0" })
-    .int(),
+  experiance: z
+  .number()
+  .min(0, { message: "Experience must be at least 0" })
+  .int(),
   skills: z.string().min(1, { message: "Skills are required" }),
   education: z.enum(["Intermediate", "Graduate", "Post Graduate"], {
     message: "Education is required",
   }),
   resume: z
-    .any()
-    .refine(
-      (file) =>
-        file[0] &&
-        (file[0].type === "application/pdf" ||
-          file[0].type === "application/msword"),
-      { message: "Only PDF or Word documents are allowed" }
-    ),
+  .any()
+  .refine(
+    (file) =>
+      file[0] &&
+      (file[0].type === "application/pdf" ||
+       file[0].type === "application/msword" ||
+       file[0].type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
+    { message: "Only PDF, Word (.doc, .docx) documents are allowed" }
+  ),
+
 });
 
 export function ApplyJobDrawer({ user, job, fetchJob, applied = false }) {
@@ -98,12 +103,12 @@ export function ApplyJobDrawer({ user, job, fetchJob, applied = false }) {
             type="number"
             placeholder="Years of Experience"
             className="flex-1"
-            {...register("experience", {
+            {...register("experiance", {
               valueAsNumber: true,
             })}
           />
-          {errors.experience && (
-            <p className="text-red-500">{errors.experience.message}</p>
+          {errors.experiance && (
+            <p className="text-red-500">{errors.experiance.message}</p>
           )}
           <Input
             type="text"

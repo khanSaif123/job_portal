@@ -4,6 +4,7 @@ import supabaseClient, { supabaseUrl } from "@/utils/supabase";
 export async function applyToJob(token, _, jobData) {
   const supabase = await supabaseClient(token);
 
+  // here logic of uploading the resume.
   const random = Math.floor(Math.random() * 90000);
   const fileName = `resume-${random}-${jobData.candidate_id}`;
 
@@ -15,6 +16,7 @@ export async function applyToJob(token, _, jobData) {
 
   const resume = `${supabaseUrl}/storage/v1/object/public/resumes/${fileName}`;
 
+  // inserting every thing.
   const { data, error } = await supabase
     .from("applications")
     .insert([

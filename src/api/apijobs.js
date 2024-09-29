@@ -5,10 +5,9 @@ export async function getJobs(token, { location, company_id, searchQuery }) {
   const supabase = await supabaseClient(token);
   let query = supabase
     .from("jobs")
-    .select("*, saved: saved_jobs(id), company: companies(name,logo_url)"); // inside company companies table
+    .select("*, saved: saved_jobs(id), company: companies(name,logo_url)");
 
   if (location) {
-    // eq is for comparing the value inside our table.
     query = query.eq("location", location);
   }
 
@@ -16,7 +15,6 @@ export async function getJobs(token, { location, company_id, searchQuery }) {
     query = query.eq("company_id", company_id);
   }
 
-  // if this perticular search query contains the title only those fields returns to us.
   if (searchQuery) {
     query = query.ilike("title", `%${searchQuery}%`);
   }

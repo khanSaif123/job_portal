@@ -10,7 +10,7 @@ import {
 } from "./ui/card";
 import { Link } from "react-router-dom";
 import useFetch from "@/hooks/use-fetch";
-import { deleteJob, saveJob } from "@/api/apiJobs";
+import { deleteJob, saveJob } from "@/api/apijobs";
 import { useUser } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
 import { BarLoader } from "react-spinners";
@@ -37,10 +37,12 @@ const JobCard = ({
 
   const handleSaveJob = async () => {
     await fnSavedJob({
+      alreadySaved: saved, // Pass whether it's already saved or not
       user_id: user.id,
       job_id: job.id,
     });
     onJobAction();
+    setSaved((prev) => !prev); // Toggle the save state
   };
 
   const handleDeleteJob = async () => {
@@ -49,7 +51,9 @@ const JobCard = ({
   };
 
   useEffect(() => {
-    if (savedJob !== undefined) setSaved(savedJob?.length > 0);
+    if (savedJob !== undefined) {
+      setSaved(savedJob?.length > 0);
+    }
   }, [savedJob]);
 
   return (
